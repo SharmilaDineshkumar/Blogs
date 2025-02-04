@@ -18,9 +18,9 @@
                     </select>
                 </form>
             </div>
-
             <div>
                 <a href="{{ route('posts.create') }}" class="btn btn-primary">+ Create Post</a>
+                    <a href="{{ route('authors.index') }}" class="btn btn-primary">Authors List</a>
             </div>
         </div>
 
