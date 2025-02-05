@@ -33,8 +33,8 @@
                 <th>Author</th>
                 <th>
                     Likes
-                    <a href="?sort=likes_desc" class="ms-2">⬆</a>
-                    <a href="?sort=likes_asc">⬇</a>
+                    <a href="?sort=likes&order=desc" class="ms-2">⬆</a>
+                    <a href="?sort=likes&order=asc">⬇</a>
                 </th>
                 <th>Actions</th>
             </tr>

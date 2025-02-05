@@ -13,6 +13,7 @@ class LikeController extends Controller
             return redirect()->back()->with('error', 'You cannot like your own post.');
         }
 
+        $post->increment('likes_count');
         auth()->user()->likes()->create(['post_id' => $post->id]);
 
         return redirect()->back()->with('success', 'Post liked.');
@@ -20,6 +21,7 @@ class LikeController extends Controller
 
     public function destroy(Post $post)
     {
+        $post->decrement('likes_count');
         auth()->user()->likes()->where('post_id', $post->id)->delete();
 
         return redirect()->back()->with('success', 'Like removed.');

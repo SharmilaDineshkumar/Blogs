@@ -12,14 +12,18 @@ class PostController extends Controller
     {
         $authors = User::all();
 
-        $query = Post::with('user', 'likes');
+        $query = Post::with('user');
 
         if (request()->has('mine')) {
             $query->where('user_id', auth()->id());
         }
 
+        if (request()->has('author') && request()->get('author') != null) {
+            $query->where('user_id', request()->get('author'));
+        }
+
         if (request()->has('sort') && request()->get('sort') === 'likes') {
-            $query->withCount('likes')->orderByDesc('likes_count');
+            $query->orderBy('likes_count', request()->get('order'));
         }
 
         $posts = $query->paginate(10);
