@@ -29,7 +29,15 @@ class PostController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $posts
+            'data' => $posts->items(), // Only return the post data
+            'pagination' => [
+                'current_page' => $posts->currentPage(),
+                'last_page' => $posts->lastPage(),
+                'per_page' => $posts->perPage(),
+                'total' => $posts->total(),
+                'next_page_url' => $posts->nextPageUrl(),
+                'prev_page_url' => $posts->previousPageUrl(),
+            ],
         ]);
     }
 
