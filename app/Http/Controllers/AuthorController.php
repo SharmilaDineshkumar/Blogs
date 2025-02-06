@@ -19,7 +19,7 @@ class AuthorController extends Controller
     public function show($id)
     {
         $author = User::findOrFail($id);
-        $posts = Post::where('author_id', $author->id)->get();
+        $posts = Post::where('user_id', $author->id)->get();
         $postCount = $posts->count();
         return view('authors.show', compact('author', 'posts', 'postCount'));
     }
