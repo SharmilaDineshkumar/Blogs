@@ -61,7 +61,9 @@ class PostController extends Controller
     {
         return response()->json([
             'success' => true,
-            'data' => $post->load('user')
+            'data' => $post->load(['user', 'likes:id,user_id,post_id'])->makeHidden(['likes'])->toArray() + [
+                    'likes' => $post->likes->pluck('user_id')->unique()->toArray(),
+                ],
         ]);
     }
 
