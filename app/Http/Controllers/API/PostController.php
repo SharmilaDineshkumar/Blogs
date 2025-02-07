@@ -11,7 +11,7 @@ class PostController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Post::with('user');
+        $query = Post::with(['user', 'likes:id,user_id,post_id']);
 
         if ($request->has('mine')) {
             $query->where('user_id', auth()->id());
@@ -21,11 +21,23 @@ class PostController extends Controller
             $query->where('user_id', $request->author);
         }
 
+// Order by likes_count if sort=likes is provided
         if ($request->has('sort') && $request->sort === 'likes') {
-            $query->orderBy('likes_count', $request->get('order', 'desc'));
+            $query->withCount('likes') // Count likes for each post
+            ->orderBy('likes_count', $request->get('order', 'desc'));
         }
 
+// Always order by created_at
+        $query->orderBy('created_at', 'desc');
+
         $posts = $query->paginate(10);
+
+// Transform the response to include only user_id from likes
+        $posts->getCollection()->transform(function ($post) {
+            return $post->makeHidden(['likes'])->toArray() + [
+                    'likes' => $post->likes->pluck('user_id')->unique()->toArray(),
+                ];
+        });
 
         return response()->json([
             'success' => true,
